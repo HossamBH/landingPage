@@ -18,12 +18,42 @@
  * 
 */
 var navBar = document.querySelector('#navbar__list');
+var navMenu = document.querySelector('.page__header');
+var fixedButton = document.querySelector('#fixedButton');
+var delay;
 
 /**
  * End Global Variables
  * Start Helper Functions
  * 
 */
+// add active class on click a specific link
+function selectSection(id=null){
+    let list = document.getElementById('navbar__list');
+    let elements = list.getElementsByTagName('li');
+
+    for(let i=1; i<=elements.length; i++){
+
+        // color the selected nav section && mark the section
+        let element = document.getElementById(`a${i}`);
+        let section = document.getElementById(`section${i}`);
+        if(id == i){
+            element.classList.add('active');
+            section.classList.add('your-active-class');
+        }
+        else{
+            
+            if(element.classList.contains('active')){
+                element.classList.remove('active');
+            }
+
+            if(section.classList.contains('your-active-class')){
+                section.classList.remove('your-active-class');
+            }
+        }
+    }
+
+}
 
 // add navegation buttons according to the number of sections
 function addNavSections(){
@@ -37,8 +67,12 @@ function addNavSections(){
         if(section != null){
             const newList = document.createElement('li');
             const newNavButton = document.createElement('a');
-            newNavButton.innerText = `Section ${i}`;
+            newNavButton.innerText = `Section${i}`;
+
+            // Scroll to anchor ID using scrollTO event
             newNavButton.setAttribute('href', `#section${i}`);
+            newNavButton.setAttribute('id', `a${i}`);
+            newList.setAttribute('onclick', `selectSection(${i});`);
             newList.appendChild(newNavButton);
             fragment.appendChild(newList);
         }
@@ -47,7 +81,27 @@ function addNavSections(){
     navBar.appendChild(fragment);
 }
 
+// hide the nav bar on scrolling
+document.addEventListener("scroll", function () {
+    navMenu.style.display = "block";
+    clearTimeout(delay);
+    var currentPosition = window.pageYOffset;
+    if (currentPosition > 100) {
+      delay = setTimeout(function () {
+        navMenu.style.display = "none";
+      }, 3000);
+      fixedButton.style.display = "block";
+    }else{
+        fixedButton.style.display = "none";
+    }
+  });
 
+// go to the top of the page
+function goTop() {
+    document.body.scrollTop = 0;
+    document.documentElement.scrollTop = 0;
+    selectSection();
+}
 /**
  * End Helper Functions
  * Begin Main Functions
@@ -55,13 +109,10 @@ function addNavSections(){
 */
 function startAnimation(){
 
-// build the nav
-addNavSections();
-
+    // build the nav
+    addNavSections();
+}
 // Add class 'active' to section when near top of viewport
-
-
-// Scroll to anchor ID using scrollTO event
 
 
 /**
@@ -75,6 +126,3 @@ addNavSections();
 // Scroll to section on link click
 
 // Set sections as active
-
-
-}
