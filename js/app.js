@@ -21,6 +21,7 @@ var navBar = document.querySelector('#navbar__list');
 var navMenu = document.querySelector('.page__header');
 var fixedButton = document.querySelector('#fixedButton');
 var delay;
+var sections = document.querySelectorAll('section');
 
 /**
  * End Global Variables
@@ -39,21 +40,16 @@ function selectSection(id=null){
         let section = document.getElementById(`section${i}`);
         if(id == i){
             element.classList.add('active');
-            section.classList.add('your-active-class');
         }
         else{
-            
             if(element.classList.contains('active')){
                 element.classList.remove('active');
-            }
-
-            if(section.classList.contains('your-active-class')){
-                section.classList.remove('your-active-class');
             }
         }
     }
 
 }
+
 
 // add navegation buttons according to the number of sections
 function addNavSections(){
@@ -94,6 +90,13 @@ document.addEventListener("scroll", function () {
     }else{
         fixedButton.style.display = "none";
     }
+    sections.forEach(sec => {
+        const rect = sec.getBoundingClientRect();
+        sec.classList.remove("your-active-class");
+        if(rect.top >= 0 && rect.top < (window.innerHeight || document.doucmentElement.clientHeight)) {
+          sec.classList.add("your-active-class");
+        }
+    });
   });
 
 // go to the top of the page
